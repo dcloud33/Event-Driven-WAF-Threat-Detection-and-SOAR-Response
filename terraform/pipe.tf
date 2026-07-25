@@ -1,0 +1,53 @@
+resource "aws_pipes_pipe" "findings" {
+  name     = "pipe-findings-to-eventbridge"
+  role_arn = aws_iam_role.pipe.arn
+
+  source = aws_dynamodb_table.waf_correlation_table.stream_arn
+
+  target = "arn:${data.aws_partition.current.partition}:events:${var.aws_region}:${data.aws_caller_identity.current.account_id}:event-bus/default"
+
+  source_parameters {
+    filter_criteria {
+      filter {
+        pattern = jsonencode({
+          eventName = ["INSERT"]
+
+          dynamodb = {
+            NewImage = {
+              status = {
+                S = ["OPEN"]
+              }
+            }
+          }
+        })
+      }
+    }
+
+    dynamodb_stream_parameters {
+      batch_size                    = 1
+      starting_position             = "LATEST"
+      maximum_retry_attempts        = 3
+      maximum_record_age_in_seconds = 3600
+    }
+  }
+
+  target_parameters {
+    input_template = <<-EOT
+  {
+    "finding_id": <$.dynamodb.NewImage.finding_id.S>,
+    "severity": <$.dynamodb.NewImage.severity.S>,
+    "risk_score": <$.dynamodb.NewImage.risk_score.N>
+  }
+  EOT
+
+    eventbridge_event_bus_parameters {
+      detail_type = "WAF Threat Finding Created"
+      source      = "seir.waf.correlation"
+    }
+  }
+
+
+  depends_on = [
+    aws_iam_role_policy.pipe
+  ]
+}
