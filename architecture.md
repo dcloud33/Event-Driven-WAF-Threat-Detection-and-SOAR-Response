@@ -1,61 +1,32 @@
 # Event Driven Architecture Diagram
- User
- &darr;
- Amazon Cognito
- &darr;
- API Gateway
- &darr;
- WAF
- &darr;
- WAF-Logs
- &darr;
- waf-bedrock-analyzer(Lambda Function) &larr; Eventbridge Schedule
- &darr;
- waf-events(DynamoDB Table)
- &darr;
- waf-threat-correlation-agent(Lambda Function) &larr; Eventbridge Schedule
- &darr;
- waf-correlation-findings(DynamoDB Table)
- &darr;
- DynamoDB Stream
- &darr;
- Eventbridge Pipe
- &darr;
- Eventbridge Eventbus(routes to matching rules)
- &darr;
- Eventbridge Pipe
 
- 
- 
+```mermaid
+flowchart TD
 
+A[Test HTTP Requests]
+--> B[API Gateway]
+--> C[AWS WAF]
+--> D[WAF Analyzer Lambda]
+--> E[DynamoDB: waf-events]
+--> F[Correlation Lambda]
+--> G[DynamoDB: waf-correlation-findings]
+--> H[DynamoDB Stream]
+--> I[EventBridge Pipe]
+--> J[Default Event Bus]
 
+J --> K[MEDIUM/HIGH Rule]
+K --> L[SOAR Response Lambda]
 
+J --> M[CRITICAL Rule]
+M --> L
+M --> N[Critical Alert SNS]
 
+L --> O[DynamoDB: security-incidents]
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+P[EventBridge Schedule]
+--> Q[Executive Reporting Lambda]
+--> R[S3: executive-reports]
+```
 
 
 
