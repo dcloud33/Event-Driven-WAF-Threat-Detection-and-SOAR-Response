@@ -230,6 +230,7 @@ resource "aws_iam_role_policy_attachment" "soar_policy_attach" {
 }
 
 
+
 ########################## Executive report agent
 
 resource "aws_iam_role" "executive_agent_role" {
@@ -243,7 +244,125 @@ resource "aws_iam_role_policy_attachment" "executive_logs" {
 }
 
 
+resource "aws_iam_role_policy" "executive_dashboard_policy" {
+  name = "ExecutiveDashboardAccessPolicy"
+  role = aws_iam_role.executive_agent_role.id
 
+  policy = jsonencode({
+    Version = "2012-10-17"
+
+    Statement = [
+      {
+        Sid    = "ReadSecurityData"
+        Effect = "Allow"
+
+        Action = [
+          "dynamodb:Scan"
+        ]
+
+        Resource = [
+          aws_dynamodb_table.waf_events.arn,
+          aws_dynamodb_table.waf_correlation_table.arn,
+          aws_dynamodb_table.security_incidents_table.arn
+        ]
+      },
+      {
+        Sid    = "InvokeBedrock"
+        Effect = "Allow"
+
+        Action = [
+          "bedrock:InvokeModel"
+        ]
+
+        Resource = "*"
+      },
+      {
+        Sid    = "WriteExecutiveReports"
+        Effect = "Allow"
+
+        Action = [
+          "s3:PutObject"
+        ]
+
+        Resource = "${aws_s3_bucket.executive_reports.arn}/executive-reports/*"
+      }
+    ]
+  })
+}
+
+###################### compliance-agent role
+
+resource "aws_iam_role" "compliance_agent_role" {
+  name               = "compliance-agent-role"
+  assume_role_policy = data.aws_iam_policy_document.assume_role.json
+}
+
+resource "aws_iam_role_policy_attachment" "compliance_attach" {
+  role       = aws_iam_role.compliance_agent_role.name
+  policy_arn = "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+}
+
+###################: compliance policy IAM
+resource "aws_iam_policy" "compliance_policy" {
+  name = "compliance-agent-policy"
+
+  policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [
+      {
+        Effect = "Allow"
+        Action = [
+          "dynamodb:DescribeTable",
+          "dynamodb:Scan",
+          "dynamodb:Query",
+          "dynamodb:GetItem",
+          "dynamodb:PutItem",
+          "dynamodb:UpdateItem"
+
+        ]
+        Resource = [
+          aws_dynamodb_table.compliance_evidence.arn,
+          aws_dynamodb_table.waf_events.arn,
+          aws_dynamodb_table.waf_correlation_table.arn,
+          aws_dynamodb_table.security_incidents_table.arn
+        ]
+      },
+      {
+        Effect = "Allow"
+        Action = [
+          "s3:PutObject"
+
+        ]
+        Resource = "${aws_s3_bucket.executive_reports.arn}/compliance-reports/*"
+      },
+      {
+        Effect = "Allow"
+        Action = [
+          "bedrock:InvokeModel"
+
+        ]
+        Resource = "*"
+      },
+      {
+        Effect = "Allow"
+        Action = [
+          "events:DescribeRule",    # gets the configuration of an EventBridge Rule
+          "scheduler:GetSchedule",  # gets the configuration of an EventBridge Scheduler schedule
+          "sns:GetTopicAttributes", # gets the attribute of a specific sns topic
+          "lambda:GetFunction"      # it retrieves detailed info about a specific Lambda function
+
+        ]
+        Resource = "*"
+      }
+
+    ]
+  })
+}
+
+resource "aws_iam_role_policy_attachment" "compliance_agent_policy_attach" {
+  role       = aws_iam_role.compliance_agent_role.name
+  policy_arn = aws_iam_policy.compliance_policy.arn
+}
 
 ################## EventBridge Assume Role: Data
 

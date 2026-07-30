@@ -170,52 +170,48 @@ resource "aws_lambda_function" "exec_dashboard_function" {
   runtime = "python3.12"
 }
 
-resource "aws_iam_role_policy" "executive_dashboard_policy" {
-  name = "ExecutiveDashboardAccessPolicy"
-  role = aws_iam_role.executive_agent_role.id
+############################## Compliance-agent:
 
-  policy = jsonencode({
-    Version = "2012-10-17"
+resource "aws_lambda_function" "compliance_agent" {
+  filename = "${path.module}/../lambda_scripts/compliance-agent.zip"
+  function_name = "compliance-agent"
+  role = aws_iam_role.compliance_agent_role.arn
+  handler = "compliance_agent.lambda_handler"
+  source_code_hash = filebase64sha256(
+    "${path.module}/../lambda_scripts/compliance-agent.zip"
+  )
 
-    Statement = [
-      {
-        Sid    = "ReadSecurityData"
-        Effect = "Allow"
+  architectures = ["x86_64"]
 
-        Action = [
-          "dynamodb:Scan"
-        ]
+  # This is so that we can reuse the existing ReportLab layer
+  layers = [
+    aws_lambda_layer_version.reportlab.arn
+  ]
 
-        Resource = [
-          aws_dynamodb_table.waf_events.arn,
-          aws_dynamodb_table.waf_correlation_table.arn,
-          aws_dynamodb_table.security_incidents_table.arn
-        ]
-      },
-      {
-        Sid    = "InvokeBedrock"
-        Effect = "Allow"
+  timeout     = 120
+  memory_size = 1024
 
-        Action = [
-          "bedrock:InvokeModel"
-        ]
+  environment {
+    variables = {
+      CONTROLS_FILE             = "/var/task/controls.json"
+      COMPLIANCE_EVIDENCE_TABLE = aws_dynamodb_table.compliance_evidence.name
+      REPORT_BUCKET             = aws_s3_bucket.executive_reports.bucket
+      REPORT_PREFIX             = "compliance-reports"
+      COMPLIANCE_FRAMEWORKS     = "NIST CSF 2.0"
+      BEDROCK_MODEL_ID          = "global.anthropic.claude-haiku-4-5-20251001-v1:0"
+      ENABLE_BEDROCK            = "true"
+      ORGANIZATION_NAME         = "SEIR Cloud Security"
+      REPORT_TITLE              = "Compliance Evidence Report"
+      UNEVALUATED_STATUS        = "REVIEW"
+    }
+  }
 
-        Resource = "*"
-      },
-      {
-        Sid    = "WriteExecutiveReports"
-        Effect = "Allow"
+  depends_on = [aws_lambda_layer_version.reportlab]
 
-        Action = [
-          "s3:PutObject"
-        ]
+  runtime = "python3.12"
 
-        Resource = "${aws_s3_bucket.executive_reports.arn}/executive-reports/*"
-      }
-    ]
-  })
+
 }
-
 
 
 

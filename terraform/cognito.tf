@@ -1,7 +1,5 @@
-# ==================================================
-# COGNITO USER POOL
-# ==================================================
 
+################## Cognito User Pool
 resource "aws_cognito_user_pool" "access_user_pool" {
   name = "test_user_pool"
 
@@ -39,11 +37,11 @@ resource "aws_cognito_user_pool_client" "userpool_client" {
   generate_secret = false
 
   callback_urls = [
-    "https://localhost/callback"
+    "http://localhost:3000/callback"
   ]
 
   logout_urls = [
-    "https://localhost/callback"
+    "http://localhost:3000/"
   ]
 
   allowed_oauth_flows_user_pool_client = true

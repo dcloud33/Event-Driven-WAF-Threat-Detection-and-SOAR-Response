@@ -102,6 +102,45 @@ resource "aws_dynamodb_table" "security_incidents_table" {
 
 }
 
+############## DynamoDB Table: compliance-evidence
+
+resource "aws_dynamodb_table" "compliance_evidence" {
+  name         = "compliance-evidence"
+  billing_mode = "PAY_PER_REQUEST"
+  hash_key     = "evidence_id"
+
+  attribute {
+    name = "evidence_id"
+    type = "S"
+  }
+
+  point_in_time_recovery {
+    enabled = true
+  }
+
+  server_side_encryption {
+    enabled = true
+  }
+
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
