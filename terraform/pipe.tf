@@ -30,7 +30,7 @@ resource "aws_pipes_pipe" "findings" {
       maximum_record_age_in_seconds = 3600
     }
   }
-
+# https://docs.aws.amazon.com/eventbridge/latest/userguide/eb-pipes-input-transformation.html
   target_parameters {
     input_template = <<-EOT
   {
