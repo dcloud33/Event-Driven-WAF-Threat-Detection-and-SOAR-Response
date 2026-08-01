@@ -1,45 +1,20 @@
 import json
-import boto3
-import uuid
 from datetime import datetime
 
-dynamodb = boto3.resource("dynamodb")
-table = dynamodb.Table("token-tracking")
-
 def lambda_handler(event, context):
-    claims = event.get("requestContext", {}).get("authorizer", {}).get("claims", {})
-    groups = claims.get("cognito:groups", [])
+    print("Incoming event:", json.dumps(event))
 
-    path = event.get("resource")
-    token_id = str(uuid.uuid4())
+    name = event.get("queryStringParameters", {}).get("name", "Unknown")
 
-    # RBAC logic
-    if path == "/node" and "admins" not in groups:
-        return {
-            "statusCode": 403,
-            "body": json.dumps({"error": "Access denied"})
-        }
-    table.update_item(
-    Key={"token_id": token_id},
-    UpdateExpression="SET used = :u",
-    ExpressionAttributeValues={
-        ":u": True
+    response = {
+        "message": f"Hello {name} from Python!",
+        "timestamp": datetime.utcnow().isoformat()
     }
-    
-)   
+
+    print("Response:", json.dumps(response))
 
     return {
         "statusCode": 200,
-        "body": json.dumps({
-            "message": "Access granted",
-            "groups": groups
-        })
+        "headers": {"Content-Type": "application/json"},
+        "body": json.dumps(response)
     }
-
-    
-
-
-
-
-
-

@@ -29,7 +29,7 @@ resource "aws_lambda_function" "python_function" {
   filename         = data.archive_file.lambda_python.output_path
   function_name    = "my_python_function"
   role             = aws_iam_role.lambda_role.arn
-  handler          = "chewbacca_python_lambda.lambda_handler"
+  handler          = "chewbacca-python-lambda.lambda_handler"
   source_code_hash = data.archive_file.lambda_python.output_base64sha256
 
   runtime = "python3.14"

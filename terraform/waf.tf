@@ -1,6 +1,4 @@
 
-
-
 resource "aws_wafv2_web_acl" "waf_rest_api" {
   name  = "waf_rest_api"
   scope = "REGIONAL"
@@ -10,7 +8,7 @@ resource "aws_wafv2_web_acl" "waf_rest_api" {
   }
 
   # Moved inline rules,
-  # Creating web acl rule to manage rulees as a seperate resource, to protect against any deletion
+  # Creating web acl rule to manage rules as a seperate resource, to protect against any deletion
   # ordering errors, especially when it comes to managed rules.
 
   visibility_config {
