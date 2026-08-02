@@ -14,3 +14,4 @@ resource "aws_lambda_layer_version" "reportlab" {
     "${path.module}/../layers/reportlab/reportlab-layer.zip"
   )
 }
+

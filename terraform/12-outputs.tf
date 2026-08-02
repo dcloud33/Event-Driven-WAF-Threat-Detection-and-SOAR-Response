@@ -1,5 +1,5 @@
-output "api_gateway_invoke_url"{
-    value = "${aws_api_gateway_stage.stage_production.invoke_url}/python?name=test"
+output "api_gateway_invoke_url" {
+  value = "${aws_api_gateway_stage.stage_production.invoke_url}/python?name=test"
 }
 
 output "cognito_user_pool_client_id" {

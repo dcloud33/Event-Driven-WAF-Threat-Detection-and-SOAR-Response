@@ -173,10 +173,10 @@ resource "aws_lambda_function" "exec_dashboard_function" {
 ############################## Compliance-agent:
 
 resource "aws_lambda_function" "compliance_agent" {
-  filename = "${path.module}/../lambda_scripts/compliance-agent.zip"
+  filename      = "${path.module}/../lambda_scripts/compliance-agent.zip"
   function_name = "compliance-agent"
-  role = aws_iam_role.compliance_agent_role.arn
-  handler = "compliance_agent.lambda_handler"
+  role          = aws_iam_role.compliance_agent_role.arn
+  handler       = "compliance_agent.lambda_handler"
   source_code_hash = filebase64sha256(
     "${path.module}/../lambda_scripts/compliance-agent.zip"
   )

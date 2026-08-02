@@ -317,7 +317,8 @@ resource "aws_iam_policy" "compliance_policy" {
           "dynamodb:Query",
           "dynamodb:GetItem",
           "dynamodb:PutItem",
-          "dynamodb:UpdateItem"
+          "dynamodb:UpdateItem",
+          "dynamodb:BatchWriteItem"
 
         ]
         Resource = [
