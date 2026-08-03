@@ -1,7 +1,7 @@
 
 ################## Cognito User Pool
 resource "aws_cognito_user_pool" "access_user_pool" {
-  name = "test_user_pool"
+  name = var.user_pool_name
 
   mfa_configuration        = "ON"
   auto_verified_attributes = ["email"]
@@ -71,7 +71,7 @@ resource "aws_cognito_user_pool_client" "userpool_client" {
 
 
 resource "aws_cognito_user_pool_domain" "domain" {
-  domain       = "dcloud33-test-auth"
+  domain       = var.domain_name
   user_pool_id = aws_cognito_user_pool.access_user_pool.id
 }
 
@@ -101,13 +101,13 @@ resource "aws_cognito_user_group" "user_group" {
 
 resource "aws_cognito_user" "example" {
   user_pool_id = aws_cognito_user_pool.access_user_pool.id
-  username     = "dcloud33"
+  username     = var.user_name
 
   password       = var.test_user_password
   message_action = "SUPPRESS"
 
   attributes = {
-    email          = "wheeling2346@gmail.com"
+    email          = var.email_endpoint
     email_verified = true
   }
 }

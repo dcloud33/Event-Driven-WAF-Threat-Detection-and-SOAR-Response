@@ -1,7 +1,11 @@
+locals{
+  project = var.project_name
+}
+
 ############## API GATEWAY REST API
 
 resource "aws_api_gateway_rest_api" "rest_api" {
-  name = "terraform_rest_api"
+  name = "${local.project}tf_rest_api"
 }
 
 

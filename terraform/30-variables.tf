@@ -14,13 +14,27 @@ variable "email_endpoint"{
 
 }
 
+variable "project_name"{
+  type = string
+  default = "armageddon-project"
+}
 
+variable "user_pool_name"{
+  type = string
+  default = "test_user_pool"
 
+}
 
+variable "domain_name"{
+  type = string
+  default = "dcloud33-test-auth"
+}
 
+variable "user_name"{
+  type = string
+  default = "dcloud33"
 
-
-
+}
 
 
 
