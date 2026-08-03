@@ -6,7 +6,7 @@ resource "aws_cloudwatch_metric_alarm" "alarm_pipe_dlq" {
   namespace                 = "AWS/SQS"
   period                    = 120
   statistic                 = "Maximum"
-  threshold                 = 80
+  threshold                 = 1
   alarm_description         = "This is for messages in dead letter queue"
   
 

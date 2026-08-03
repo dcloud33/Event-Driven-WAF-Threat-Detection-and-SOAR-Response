@@ -6,6 +6,8 @@ resource "aws_pipes_pipe" "findings" {
 
   target = "arn:${data.aws_partition.current.partition}:events:${var.aws_region}:${data.aws_caller_identity.current.account_id}:event-bus/default"
 
+
+
   log_configuration {
     include_execution_data = ["ALL"]
     level                  = "INFO"
@@ -30,13 +32,21 @@ resource "aws_pipes_pipe" "findings" {
         })
       }
     }
-
+# https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/pipes_pipe#argument-reference
     dynamodb_stream_parameters {
       batch_size                    = 1
       starting_position             = "LATEST"
       maximum_retry_attempts        = 3
       maximum_record_age_in_seconds = 3600
+      dead_letter_config {
+        arn = aws_sqs_queue.pipe_dlq.arn
+      }
     }
+
+
+
+
+
   }
   # https://docs.aws.amazon.com/eventbridge/latest/userguide/eb-pipes-input-transformation.html
   target_parameters {
@@ -47,11 +57,13 @@ resource "aws_pipes_pipe" "findings" {
     "risk_score": <$.dynamodb.NewImage.risk_score.N>
   }
   EOT
+  
 
     eventbridge_event_bus_parameters {
       detail_type = "WAF Threat Finding Created"
       source      = "seir.waf.correlation"
     }
+    
   }
 
   depends_on = [
