@@ -419,7 +419,7 @@ resource "aws_iam_role_policy_attachment" "eventbridge_policy_attach_1" {
 }
 
 
-###################### EventBridge Schedule 2 Role 
+###################### EVENTBRIDGE SCHEDULE 2
 
 data "aws_iam_policy_document" "eventbridge_execution_role_2" {
   statement {
@@ -434,7 +434,7 @@ data "aws_iam_policy_document" "eventbridge_execution_role_2" {
   }
 }
 
-# Eventbridge Schedule 2 Role
+################### EVENTBRIDGE SCHEDULE 2 ROLE
 resource "aws_iam_role" "eventbridge_role_2" {
   name               = "eventbridge_execution_role_2"
   assume_role_policy = data.aws_iam_policy_document.eventbridge_execution_role_2.json
@@ -465,7 +465,7 @@ resource "aws_iam_role_policy_attachment" "eventbridge_policy_attach_2" {
 }
 
 
-#########################  EventBridge Pipes Assume Role
+#########################  EVENTBRIDGE PIPES ROLE
 
 data "aws_iam_policy_document" "pipes_assume" {
   statement {
@@ -529,7 +529,7 @@ resource "aws_iam_role_policy" "pipe" {
   policy = data.aws_iam_policy_document.pipe.json
 }
 
-##################### SNS topic policy
+##################### SNS TOPIC POLICY
 data "aws_iam_policy_document" "critical_sns_policy" {
   statement {
     effect = "Allow"
@@ -563,7 +563,7 @@ resource "aws_sns_topic_policy" "critical_sns" {
   policy = data.aws_iam_policy_document.critical_sns_policy.json
 }
 
-############################# Scheduler Role
+############################# SCHEDULE ROLE
 
 data "aws_iam_policy_document" "executive_scheduler_assume_role" {
   statement {

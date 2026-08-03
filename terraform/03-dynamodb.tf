@@ -1,5 +1,5 @@
 
-############## DynamoDB Table: waf-events ################
+############## DynamoDB TABLE: waf-events ################
 resource "aws_dynamodb_table" "waf_events" {
 
   name = "waf-events"
@@ -37,7 +37,7 @@ resource "aws_dynamodb_table" "waf_events" {
 #   security-incidents
 #    Primary key: incident_id
 
-############## DynamoDB Table: waf-correlation-findings ################
+############## DYNAMOEDB: waf-correlation-findings ################
 
 resource "aws_dynamodb_table" "waf_correlation_table" {
 
@@ -70,7 +70,7 @@ resource "aws_dynamodb_table" "waf_correlation_table" {
 
 
 
-############## DynamoDB Table: security-incidents ################
+############## DYNAMODB: security-incidents ################
 
 resource "aws_dynamodb_table" "security_incidents_table" {
 
@@ -102,7 +102,7 @@ resource "aws_dynamodb_table" "security_incidents_table" {
 
 }
 
-############## DynamoDB Table: compliance-evidence
+############## DYNAMODB: compliance-evidence
 
 resource "aws_dynamodb_table" "compliance_evidence" {
   name         = "compliance-evidence"

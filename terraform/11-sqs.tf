@@ -1,4 +1,5 @@
 ########## SQS Dead letter Queue
+# This is for EventBridge Pipe to send data to the dead letter queue
 
 resource "aws_sqs_queue" "pipe_dlq" {
   name                      = "pipe-dlq"

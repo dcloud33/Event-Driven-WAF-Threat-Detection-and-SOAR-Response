@@ -1,14 +1,12 @@
-# ==================================================
-# API GATEWAY REST API
-# ==================================================
+############## API GATEWAY REST API
 
 resource "aws_api_gateway_rest_api" "rest_api" {
   name = "terraform_rest_api"
 }
 
-# ==================================================
-# API GATEWAY RESOURCES
-# ==================================================
+
+################ API GATEWAY RESOURCES
+
 
 # Creates the /python resource.
 resource "aws_api_gateway_resource" "python_resource" {
@@ -24,9 +22,9 @@ resource "aws_api_gateway_resource" "node_resource" {
   path_part   = "node"
 }
 
-# ==================================================
-# COGNITO USER POOL AUTHORIZER
-# ==================================================
+
+################# COGNITO USER POOL AUTHORIZER
+
 
 resource "aws_api_gateway_authorizer" "gateway_authorizer" {
   name          = "CognitoUserPoolAuthorizer"
@@ -37,9 +35,9 @@ resource "aws_api_gateway_authorizer" "gateway_authorizer" {
   identity_source = "method.request.header.Authorization"
 }
 
-# ==================================================
-# API GATEWAY METHODS
-# ==================================================
+
+################# API GATEWAY METHODS
+
 
 # Protects GET /python with the Cognito user pool authorizer.
 #
@@ -69,9 +67,9 @@ resource "aws_api_gateway_method" "node_method" {
   authorizer_id = aws_api_gateway_authorizer.gateway_authorizer.id
 }
 
-# ==================================================
-# LAMBDA PROXY INTEGRATIONS
-# ==================================================
+
+############ LAMBDA PROXY INTEGRATIONS
+
 
 resource "aws_api_gateway_integration" "python_integration" {
   rest_api_id = aws_api_gateway_rest_api.rest_api.id
@@ -93,9 +91,8 @@ resource "aws_api_gateway_integration" "node_integration" {
   uri                     = aws_lambda_function.node_function.invoke_arn
 }
 
-# ==================================================
-# API GATEWAY DEPLOYMENT
-# ==================================================
+############## API GATEWAY DEPLOYMENT
+
 
 resource "aws_api_gateway_deployment" "api_deployment" {
   rest_api_id = aws_api_gateway_rest_api.rest_api.id
@@ -149,9 +146,8 @@ resource "aws_api_gateway_deployment" "api_deployment" {
   ]
 }
 
-# ==================================================
-# API GATEWAY PRODUCTION STAGE
-# ==================================================
+################## API GATEWAY PRODUCTION STAGE
+
 
 resource "aws_api_gateway_stage" "stage_production" {
   rest_api_id   = aws_api_gateway_rest_api.rest_api.id

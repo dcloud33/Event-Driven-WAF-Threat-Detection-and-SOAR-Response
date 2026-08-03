@@ -1,3 +1,5 @@
+########## CLOUDWATCH ALARM FOR DLQ
+
 resource "aws_cloudwatch_metric_alarm" "alarm_pipe_dlq" {
   alarm_name                = "pipe-dlq-has-messages"
   comparison_operator       = "GreaterThanOrEqualToThreshold"

@@ -1,12 +1,13 @@
+data "aws_caller_identity" "current" {}
+
+
+
 resource "aws_s3_bucket" "executive_reports" {
-  bucket = "executive-reports-bucket007212026"
+  bucket = "executive-reports-bucket${data.aws_caller_identity.current.account_id}"
 
   force_destroy = true
 
-  tags = {
-    Name        = "incident-bucket007212026"
-    Environment = "Prod"
-  }
+
 }
 
 

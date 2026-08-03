@@ -1,4 +1,4 @@
-## Cloudwatch WAF Logs
+################ CLOUDWATCH WAF LOGS
 
 resource "aws_cloudwatch_log_group" "waf_logs" {
   name              = "aws-waf-logs-api-logs"
@@ -10,7 +10,7 @@ resource "aws_wafv2_web_acl_logging_configuration" "example" {
   resource_arn            = aws_wafv2_web_acl.waf_rest_api.arn
 }
 
-############## EventBridge Pipe Logs
+############## EVENTBRIDGE PIPE LOGS
 
 resource "aws_cloudwatch_log_group" "pipe_logs" {
   name              = "/aws/vendedlogs/pipes/pipe-logs"

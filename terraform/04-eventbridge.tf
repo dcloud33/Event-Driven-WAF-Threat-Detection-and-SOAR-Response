@@ -35,7 +35,7 @@ resource "aws_scheduler_schedule" "eventbridge_threat_correlation" {
   }
 }
 
-# Eventbridge event rule
+############# EVENTBRIDGE EVENT RULE
 
 resource "aws_cloudwatch_event_rule" "soar_findings" {
   name        = "waf-threat-findings"
@@ -60,7 +60,7 @@ resource "aws_cloudwatch_event_rule" "soar_findings" {
 }
 
 # Lambda Permissions for EventBridge to invoke the SOAR Lambda
-#TODO:complete this out
+
 resource "aws_lambda_permission" "allow_eventbridge" {
   statement_id  = "AllowExecutionFromEventBridge"
   action        = "lambda:InvokeFunction"
@@ -113,7 +113,7 @@ resource "aws_lambda_permission" "allow_critical_eventbridge" {
   source_arn    = aws_cloudwatch_event_rule.critical_findings.arn
 }
 
-################### Scheduler
+################### EVENTBRIDGE SCHEDULE
 
 resource "aws_scheduler_schedule" "executive_report_schedule" {
   name       = "daily-executive-security-report"

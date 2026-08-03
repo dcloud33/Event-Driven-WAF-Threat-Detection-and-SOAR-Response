@@ -1,3 +1,5 @@
+###################### EVENTBRIDGE PIPES
+
 resource "aws_pipes_pipe" "findings" {
   name     = "pipe-findings-to-eventbridge"
   role_arn = aws_iam_role.pipe.arn

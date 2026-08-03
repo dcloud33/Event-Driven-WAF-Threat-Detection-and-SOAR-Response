@@ -1,3 +1,4 @@
+############ WAF FOR APIGATEWAY
 
 resource "aws_wafv2_web_acl" "waf_rest_api" {
   name  = "waf_rest_api"
@@ -7,9 +8,6 @@ resource "aws_wafv2_web_acl" "waf_rest_api" {
     allow {}
   }
 
-  # Moved inline rules,
-  # Creating web acl rule to manage rules as a seperate resource, to protect against any deletion
-  # ordering errors, especially when it comes to managed rules.
 
   visibility_config {
     cloudwatch_metrics_enabled = true

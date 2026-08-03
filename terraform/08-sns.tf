@@ -1,3 +1,5 @@
+############### SNS TOPIC FOR CRITICAL ALERT FROM SOAR FUNCTION
+
 resource "aws_sns_topic" "critical_sns" {
   name = "critical-sns-topic"
 }
@@ -15,7 +17,7 @@ resource "aws_cloudwatch_event_target" "critical_sns_target" {
 }
 
 
-############# SNS for Pipe Dead letter queue
+############# SNS FOR PIPE DEAD LETTER QUEUE
 
 resource "aws_sns_topic" "pipe_dlq-sns" {
   name = "pipe-dlq-sns"

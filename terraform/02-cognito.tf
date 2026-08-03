@@ -26,9 +26,9 @@ resource "aws_cognito_user_pool" "access_user_pool" {
   }
 }
 
-# ==================================================
-# COGNITO USER POOL CLIENT
-# ==================================================
+
+################### COGNITO USER POOL CLIENT
+
 
 resource "aws_cognito_user_pool_client" "userpool_client" {
   name         = "user_pool_client"
@@ -66,18 +66,18 @@ resource "aws_cognito_user_pool_client" "userpool_client" {
   ]
 }
 
-# ==================================================
-# COGNITO DOMAIN
-# ==================================================
+
+################ COGNITO DOMAIN
+
 
 resource "aws_cognito_user_pool_domain" "domain" {
   domain       = "dcloud33-test-auth"
   user_pool_id = aws_cognito_user_pool.access_user_pool.id
 }
 
-# ==================================================
-# COGNITO GROUPS
-# ==================================================
+
+################## COGNITO GROUPS
+
 
 resource "aws_cognito_user_group" "admin_group" {
   name         = "admin"
@@ -95,9 +95,9 @@ resource "aws_cognito_user_group" "user_group" {
   precedence = 2
 }
 
-# ==================================================
-# COGNITO USER
-# ==================================================
+
+################### COGNITO USER
+
 
 resource "aws_cognito_user" "example" {
   user_pool_id = aws_cognito_user_pool.access_user_pool.id
@@ -112,9 +112,9 @@ resource "aws_cognito_user" "example" {
   }
 }
 
-# ==================================================
-# GROUP MEMBERSHIP
-# ==================================================
+
+########### GROUP FOR USER
+
 
 resource "aws_cognito_user_in_group" "dcloud33_admin" {
   user_pool_id = aws_cognito_user_pool.access_user_pool.id
