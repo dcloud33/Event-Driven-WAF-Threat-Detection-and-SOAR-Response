@@ -332,9 +332,17 @@ resource "aws_iam_policy" "compliance_policy" {
         Effect = "Allow"
         Action = [
           "s3:PutObject"
-
+          
         ]
         Resource = "${aws_s3_bucket.executive_reports.arn}/compliance-reports/*"
+      },
+      {
+        Effect = "Allow"
+        Action = [
+          "s3:ListBucket"
+          
+        ]
+        Resource = [aws_s3_bucket.executive_reports.arn]
       },
       {
         Effect = "Allow"
@@ -478,7 +486,7 @@ resource "aws_iam_role" "pipe" {
 
 data "aws_iam_policy_document" "pipe" {
   statement {
-    sid = "ReadFindingStream"
+    sid = "StreamEventsDynamoDB"
     actions = [
       "dynamodb:DescribeStream",
       "dynamodb:GetRecords",
@@ -486,6 +494,24 @@ data "aws_iam_policy_document" "pipe" {
       "dynamodb:ListStreams"
     ]
     resources = [aws_dynamodb_table.waf_correlation_table.stream_arn]
+  }
+
+  statement {
+    sid = "MessageSQSPermission"
+    actions = [
+      "sqs:SendMessage",
+
+    ]
+    resources = [aws_sqs_queue.pipe_dlq.arn]
+  }
+    statement {
+    sid = "PipeLogsPermission"
+    actions = [
+      "logs:CreateLogStream",
+      "logs:PutLogEvents"
+
+    ]
+    resources = [aws_sqs_queue.pipe_dlq.arn]
   }
 
   statement {

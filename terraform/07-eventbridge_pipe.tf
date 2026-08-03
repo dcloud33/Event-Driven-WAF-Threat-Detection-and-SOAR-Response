@@ -6,6 +6,14 @@ resource "aws_pipes_pipe" "findings" {
 
   target = "arn:${data.aws_partition.current.partition}:events:${var.aws_region}:${data.aws_caller_identity.current.account_id}:event-bus/default"
 
+  log_configuration {
+    include_execution_data = ["ALL"]
+    level                  = "INFO"
+    cloudwatch_logs_log_destination {
+      log_group_arn = aws_cloudwatch_log_group.pipe_logs.arn
+    }
+  }
+
   source_parameters {
     filter_criteria {
       filter {
@@ -45,7 +53,6 @@ resource "aws_pipes_pipe" "findings" {
       source      = "seir.waf.correlation"
     }
   }
-
 
   depends_on = [
     aws_iam_role_policy.pipe

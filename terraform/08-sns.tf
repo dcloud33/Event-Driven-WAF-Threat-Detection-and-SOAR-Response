@@ -4,7 +4,7 @@ resource "aws_sns_topic" "critical_sns" {
 resource "aws_sns_topic_subscription" "sns_subscription" {
   topic_arn = aws_sns_topic.critical_sns.arn
   protocol  = "email"
-  endpoint  = "wheeling2346@gmail.com"
+  endpoint  = var.email_endpoint
 }
 
 # Connect the EventBridge rule to the SNS topic
@@ -15,8 +15,16 @@ resource "aws_cloudwatch_event_target" "critical_sns_target" {
 }
 
 
+############# SNS for Pipe Dead letter queue
 
-
+resource "aws_sns_topic" "pipe_dlq-sns" {
+  name = "pipe-dlq-sns"
+}
+resource "aws_sns_topic_subscription" "dlq_sns_subscription" {
+  topic_arn = aws_sns_topic.pipe_dlq-sns.arn
+  protocol  = "email"
+  endpoint  = var.email_endpoint
+}
 
 
 
