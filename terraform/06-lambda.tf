@@ -134,7 +134,7 @@ data "archive_file" "exec_dashboard_agent" {
 resource "aws_lambda_function" "exec_dashboard_function" {
   filename         = data.archive_file.exec_dashboard_agent.output_path
   function_name    = "executive-dashboard-agent"
-  role             = aws_iam_role.executive_agent_role.arn # Create role
+  role             = aws_iam_role.executive_agent_role.arn 
   handler          = "executive_dashboard_agent.lambda_handler"
   source_code_hash = data.archive_file.exec_dashboard_agent.output_base64sha256
 
