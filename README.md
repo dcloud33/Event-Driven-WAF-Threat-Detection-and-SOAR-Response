@@ -63,7 +63,7 @@ Additional Services:
 - EventBridge Pipe + DLQ Monitoring
 - Executive Reporting Platform
 ```
-![Architecure Diagram](architecture/eventdriven-security-pipeline.pdf)
+![Architecure Diagram](architecture/eventdriven-security-pipeline.png)
 
 ## Core Components
 
