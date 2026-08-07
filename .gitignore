@@ -55,8 +55,7 @@ ENV/
 *.zip
 package/
 lambda-package/
-lambda_layer/
-layer/
+
 python/
 
 build/
