@@ -85,18 +85,6 @@ credentials.json
 .aws/
 
 
-# =====================================================
-# Generated Lab 12 Reports
-# =====================================================
-
-executive-reports/
-reports/
-output/
-generated-reports/
-
-*.pdf
-*.log
-
 
 # =====================================================
 # Local Test Data
