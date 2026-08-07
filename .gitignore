@@ -48,21 +48,7 @@ env/
 ENV/
 
 
-# =====================================================
-# Lambda Deployment Packages
-# =====================================================
 
-*.zip
-package/
-lambda-package/
-
-python/
-
-build/
-dist/
-
-# Lambda dependencies installed locally
-site-packages/
 
 
 # =====================================================
